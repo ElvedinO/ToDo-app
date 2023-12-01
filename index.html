@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      id="mainDiv"
+      class="main-container container bg-warning bg-gradient border-4 rounded-4 rounded-top-0 p-1"
+    >
+      <div class="animation-container">
+        <h2 class="title">
+          <span class="title-word title-word-0">&#9829;</span>
+          <span class="title-word title-word-1">Samo</span>
+          <span class="title-word title-word-2">Za</span>
+          <span class="title-word title-word-3">Dzanu</span>
+          <span class="title-word title-word-4">&#9829;</span>
+        </h2>
+      </div>
+      <div class="d-flex justify-content-between pt-2 ps-3">
+        <div id="btn-container" class="filter-todo d-flex gap-2 flex-grow-1">
+          <button id="activeBtn" class="btn btn-outline-light w-25">
+            Nisam uradila
+          </button>
+          <button id="completedBtn" class="btn btn-outline-light w-25">
+            Uradila
+          </button>
+          <button id="allBtn" value="all" class="btn btn-outline-light w-25">
+            Sve
+          </button>
+        </div>
+        <button class="open-add btn btn-light rounded-5 me-3">
+          Dodaj <i class="bi bi-plus-circle"></i>
+        </button>
+      </div>
+
+      <div id="task-list" class="todo-container">
+        <ul class="todo-list list-unstyled"></ul>
+      </div>
+    </div>
+    <div
+      class="popup container d-none justify-content-center bg-gradient bg-warning rounded-4 w-75"
+    >
+      <input
+        id="inputVal"
+        class="rounded-start-3 border-0 w-75"
+        type="text"
+        placeholder="Napisi sta ces mi kupiti?"
+      />
+      <button class="add btn btn-secondary rounded-0 rounded-end-3">
+        Dodaj <i class="bi bi-plus-circle"></i>
+      </button>
+    </div>
+
+    <div class="overlay d-none"></div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>
