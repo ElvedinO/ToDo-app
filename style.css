@@ -24,9 +24,9 @@ body {
   height: 2.5rem;
   line-height: 2.5rem;
 }
-.todo input {
+/* .todo input {
   flex: 1;
-}
+} */
 
 .btns {
   margin: 3px 0;

@@ -299,8 +299,7 @@ function getTodos() {
       'mt-3',
       'bg-dark',
       'rounded-5',
-      'bg-opacity-10',
-      'todo'
+      'bg-opacity-10'
     );
     const newTodoInput = document.createElement('input');
     newTodoInput.classList.add(
