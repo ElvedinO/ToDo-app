@@ -24,7 +24,7 @@ body {
   height: 2.5rem;
   line-height: 2.5rem;
 }
-.todo li {
+.todo input {
   flex: 1;
 }
 
@@ -137,4 +137,7 @@ input {
   font-weight: 800;
   font-size: 5vw;
   text-transform: uppercase;
+}
+.new-input-bg {
+  background-color: transparent;
 }
