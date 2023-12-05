@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;500&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -24,17 +26,12 @@ body {
   height: 2.5rem;
   line-height: 2.5rem;
 }
-/* .todo input {
-  flex: 1;
-} */
 
-.btns {
-  margin: 3px 0;
-}
 input {
-  outline: yellow;
+  outline: none;
 }
 .popup {
+  position: relative;
   z-index: 4;
 }
 .overlay {
@@ -140,4 +137,10 @@ input {
 }
 .new-input-bg {
   background-color: transparent;
+}
+.img {
+  position: absolute;
+  width: 25vh;
+  right: 23%;
+  top: 25%;
 }

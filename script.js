@@ -17,13 +17,25 @@ activeBtn.addEventListener('click', showActiveTodos);
 completedBtn.addEventListener('click', showCompletedTodos);
 allBtn.addEventListener('click', showAllTodos);
 
-document.addEventListener('DOMContentLoaded', getTodos);
+document.addEventListener('DOMContentLoaded', appendTodoToDOM);
 document.addEventListener('DOMContentLoaded', showActiveTodos);
 createTodo.addEventListener('click', createTask);
 showPopup.addEventListener('click', openPopup);
 overlay.addEventListener('click', closePopup);
 
 //Functions
+
+function openPopup() {
+  popUp.classList.remove('d-none');
+  popUp.classList.add('d-flex');
+  overlay.classList.remove('d-none');
+}
+
+function closePopup() {
+  popUp.classList.add('d-none');
+  overlay.classList.add('d-none');
+  location.reload();
+}
 
 function showActiveTodos() {
   clearTodoList();
@@ -62,6 +74,11 @@ function showAllTodos() {
   });
 }
 
+function clearTodoList() {
+  // Clear the existing todos in the todoList
+  todoList.innerHTML = '';
+}
+
 function handleEditButtonClick(todo, newTodoInput) {
   const editButton = event.target;
 
@@ -79,7 +96,7 @@ function handleEditButtonClick(todo, newTodoInput) {
   }
 }
 
-function appendTodoToDOM(todo) {
+function createTodoDiv(todo, isCompleted) {
   const todoDiv = document.createElement('div');
   todoDiv.classList.add(
     'd-flex',
@@ -89,19 +106,19 @@ function appendTodoToDOM(todo) {
     'ms-4',
     'ps-3',
     'mt-3',
-    'bg-dark',
+    'bg-light',
     'rounded-5',
-    'bg-opacity-10',
-    'todo'
+    'bg-opacity-75'
   );
 
   const newTodoInput = document.createElement('input');
   newTodoInput.classList.add(
     'value-text',
     'text-wrap',
-    'text-light',
+    'text-dark',
     'border-0',
-    'new-input-bg'
+    'new-input-bg',
+    'w-100'
   );
   newTodoInput.type = 'text';
   newTodoInput.value = todo.text;
@@ -132,106 +149,34 @@ function appendTodoToDOM(todo) {
       deleteStorage(todo.text);
     },
   });
+
   todoDiv.appendChild(checkButton);
   todoDiv.appendChild(editButton);
   todoDiv.appendChild(deleteButton);
 
-  todoList.appendChild(todoDiv);
-
   // Set the 'completed' class based on the completion status
-  if (todo.completed) {
-    todoDiv.classList.add('completed');
+  if (isCompleted) {
+    newTodoInput.classList.add('completed');
+    editButton.classList.add('d-none');
+    deleteButton.classList.add('ms-1');
+    checkButton.innerHTML = '<i class="bi bi-arrow-return-left"></i>';
   }
+
+  return todoDiv;
 }
 
-function clearTodoList() {
-  // Clear the existing todos in the todoList
-  todoList.innerHTML = '';
+function appendTodoToDOM(todo) {
+  const todoDiv = createTodoDiv(todo, todo.completed);
+  todoList.appendChild(todoDiv);
 }
 
-function openPopup() {
-  popUp.classList.remove('d-none');
-  popUp.classList.add('d-flex');
-  overlay.classList.remove('d-none');
-}
-
-function closePopup() {
-  popUp.classList.add('d-none');
-  overlay.classList.add('d-none');
-  location.reload();
-}
-
-//Creating task
 function createTask() {
   const todoText = inputVal.value.trim();
 
   if (todoText !== '') {
-    const todoDiv = document.createElement('div');
-    todoDiv.classList.add(
-      'd-flex',
-      'justify-content-between',
-      'mb-1',
-      'me-4',
-      'ms-4',
-      'ps-3',
-      'mt-3',
-      'bg-dark',
-      'rounded-5',
-      'bg-opacity-10',
-      'todo'
-    );
-
-    const newTodoInput = document.createElement('input');
-    newTodoInput.classList.add(
-      'value-text',
-      'text-wrap',
-      'text-light',
-      'border-0',
-      'new-input-bg'
-    );
-    newTodoInput.type = 'text';
-    newTodoInput.value = todoText;
-    newTodoInput.setAttribute('readonly', 'readonly');
-
-    todoDiv.appendChild(newTodoInput);
-
-    // const newTodo = document.createElement('li');
-    // newTodo.classList.add('value-text', 'text-wrap', 'text-light');
-    // todoDiv.appendChild(newTodo);
-    // newTodo.innerText = todoText;
+    const todoDiv = createTodoDiv({ text: todoText }, false);
     inputVal.value = '';
-
-    saveLocalTodos(newTodoInput.value, false);
-
-    const checkButton = Object.assign(document.createElement('button'), {
-      className: 'complete-btn btn btn-outline-success rounded-5 me-1',
-      innerHTML: '<i class="bi bi-check-circle-fill"></i>',
-      onclick: () => {
-        toggleCompletionStatus(todoDiv, newTodoInput.value);
-      },
-    });
-
-    const editButton = document.createElement('button');
-    editButton.className = 'btn btn-outline-primary rounded-5 ms-1 me-1';
-    editButton.innerHTML = 'Uredi';
-    editButton.addEventListener('click', () => {
-      handleEditButtonClick(todo, newTodoInput);
-    });
-
-    const deleteButton = Object.assign(document.createElement('button'), {
-      className: 'btn btn-outline-danger rounded-5',
-      innerHTML: '<i class="bi bi-trash-fill"></i>',
-      onclick: () => {
-        deleteDiv(todoDiv);
-        deleteStorage(newTodo.innerText);
-      },
-    });
-
-    todoDiv.appendChild(checkButton);
-    todoDiv.appendChild(editButton);
-
-    todoDiv.appendChild(deleteButton);
-
+    saveLocalTodos(todoText, false);
     closePopup();
     todoList.appendChild(todoDiv);
   }
@@ -241,6 +186,7 @@ function deleteDiv(divToDelete) {
   todoList.removeChild(divToDelete);
 }
 
+//Accesing Localstorage
 function deleteStorage(todoText) {
   let todos = getLocalTodos();
   todos = todos.filter((todo) => todo.text !== todoText);
@@ -283,75 +229,4 @@ function saveLocalTodos(todoText, completed, oldTodoText) {
   }
 
   localStorage.setItem('todos', JSON.stringify(todos));
-}
-
-function getTodos() {
-  let todos = getLocalTodos();
-  todos.forEach((todo) => {
-    const todoDiv = document.createElement('div');
-    todoDiv.classList.add(
-      'd-flex',
-      'justify-content-between',
-      'mb-1',
-      'me-4',
-      'ms-4',
-      'ps-3',
-      'mt-3',
-      'bg-dark',
-      'rounded-5',
-      'bg-opacity-10'
-    );
-    const newTodoInput = document.createElement('input');
-    newTodoInput.classList.add(
-      'value-text',
-      'text-wrap',
-      'text-light',
-      'border-0',
-      'new-input-bg'
-    );
-    newTodoInput.type = 'text';
-    newTodoInput.value = todo.text;
-    newTodoInput.setAttribute('readonly', 'readonly');
-
-    todoDiv.appendChild(newTodoInput);
-
-    // const newTodo = document.createElement('li');
-    // newTodo.classList.add('value-text', 'text-wrap', 'text-light');
-    // todoDiv.appendChild(newTodo);
-    // newTodo.innerText = todo.text;
-
-    const checkButton = Object.assign(document.createElement('button'), {
-      className: 'complete-btn btn btn-outline-success rounded-5 me-1',
-      innerHTML: '<i class="bi bi-check-circle-fill"></i>',
-      onclick: () => {
-        toggleCompletionStatus(todoDiv, newTodoInput.value);
-      },
-    });
-
-    const editButton = document.createElement('button');
-    editButton.className = 'btn btn-outline-primary rounded-5 ms-1 me-1';
-    editButton.innerHTML = 'Uredi';
-    editButton.addEventListener('click', () => {
-      handleEditButtonClick(todo, newTodoInput);
-    });
-    const deleteButton = Object.assign(document.createElement('button'), {
-      className: 'btn btn-outline-danger rounded-5',
-      innerHTML: '<i class="bi bi-trash-fill"></i>',
-      onclick: () => {
-        deleteDiv(todoDiv);
-        deleteStorage(todo.text);
-      },
-    });
-
-    todoDiv.appendChild(checkButton);
-    todoDiv.appendChild(editButton);
-
-    todoDiv.appendChild(deleteButton);
-
-    if (todo.completed) {
-      todoDiv.classList.add('completed');
-    }
-
-    todoList.appendChild(todoDiv);
-  });
 }
